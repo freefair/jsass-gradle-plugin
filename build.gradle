@@ -1,5 +1,6 @@
 plugins {
     id "java-gradle-plugin"
+    id "com.gradle.plugin-publish" version "0.9.7"
 }
 
 gradlePlugin {
@@ -8,6 +9,25 @@ gradlePlugin {
             id = "io.freefair.jsass"
             implementationClass = "io.freefair.gradle.plugins.JSassPlugin"
         }
+    }
+}
+
+
+pluginBundle {
+    website = "https://github.com/freefair/jsass-gradle-plugin"
+    vcsUrl = 'https://github.com/freefair/jsass-gradle-plugin'
+
+    plugins {
+        jSass {
+            id = "io.freefair.jsass"
+            displayName = "jSass Plugin"
+            description = "jSass Plugin"
+            tags = ['jSass', 'sass', 'scss']
+        }
+    }
+
+    mavenCoordinates {
+        groupId = project.group
     }
 }
 
