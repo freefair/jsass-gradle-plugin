@@ -106,21 +106,25 @@ public class CompileSass extends DefaultTask {
      * Custom import functions.
      */
     @Input
+    @Optional
     private List<Object> functionProviders = new LinkedList<>();
 
     @Input
+    @Optional
     private List<Importer> headerImporters = new LinkedList<>();
 
     /**
      * Custom import functions.
      */
     @Input
+    @Optional
     private Collection<Importer> importers = new LinkedList<>();
 
     /**
      * SassList of paths.
      */
     @InputFiles
+    @Optional
     private FileCollection includePaths;
 
     @Input
@@ -142,7 +146,8 @@ public class CompileSass extends DefaultTask {
     private OutputStyle outputStyle = OutputStyle.NESTED;
 
     @Input
-    private String pluginPath = null;
+    @Optional
+    private String pluginPath;
 
     /**
      * Precision for outputting fractional numbers.
@@ -172,8 +177,10 @@ public class CompileSass extends DefaultTask {
      * Path to source map file. Enables the source map generating. Used to create sourceMappingUrl.
      */
     @Input
+    @Optional
     private URI sourceMapFile;
 
     @Input
+    @Optional
     private URI sourceMapRoot;
 }
