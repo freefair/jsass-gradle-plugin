@@ -42,7 +42,9 @@ public class CompileSass extends DefaultTask {
         options.setFunctionProviders(functionProviders);
         options.setHeaderImporters(headerImporters);
         options.setImporters(importers);
-        options.setIncludePaths(new ArrayList<>(includePaths.getFiles()));
+        if(includePaths != null) {
+            options.setIncludePaths(new ArrayList<>(includePaths.getFiles()));
+        }
         options.setIndent(indent);
         options.setLinefeed(linefeed);
         options.setOmitSourceMapUrl(omitSourceMapUrl);
