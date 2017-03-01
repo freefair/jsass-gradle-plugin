@@ -89,7 +89,7 @@ public class CompileSass extends DefaultTask {
 
     private void compile(File in, File out, Compiler compiler, Options options) {
         try {
-            Output output = compiler.compileFile(in.toURI(), out.toURI(), options);
+            Output output = compiler.compileFile(in.getAbsoluteFile().toURI(), out.getAbsoluteFile().toURI(), options);
             ResourceGroovyMethods.write(out, output.getCss());
         } catch (CompilationException e) {
             SassError sassError = new Gson().fromJson(e.getErrorJson(), SassError.class);
