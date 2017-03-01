@@ -42,7 +42,7 @@ public class CompileSass extends DefaultTask {
         options.setFunctionProviders(functionProviders);
         options.setHeaderImporters(headerImporters);
         options.setImporters(importers);
-        if(includePaths != null) {
+        if (includePaths != null) {
             options.setIncludePaths(new ArrayList<>(includePaths.getFiles()));
         }
         options.setIndent(indent);
@@ -89,7 +89,11 @@ public class CompileSass extends DefaultTask {
 
     private void compile(File in, File out, Compiler compiler, Options options) {
         try {
-            Output output = compiler.compileFile(in.getAbsoluteFile().toURI(), out.getAbsoluteFile().toURI(), options);
+            URI inputPath = in.getAbsoluteFile().toURI();
+            URI outputPath = out.getAbsoluteFile().toURI();
+
+            getLogger().info("Compile {} to {}", inputPath, outputPath);
+            Output output = compiler.compileFile(inputPath, outputPath, options);
             ResourceGroovyMethods.write(out, output.getCss());
         } catch (CompilationException e) {
             SassError sassError = new Gson().fromJson(e.getErrorJson(), SassError.class);
