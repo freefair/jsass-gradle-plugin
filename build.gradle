@@ -13,6 +13,7 @@ gradlePlugin {
     }
 }
 
+group = "io.freefair.gradle"
 
 pluginBundle {
     website = "https://github.com/freefair/jsass-gradle-plugin"
