@@ -1,7 +1,10 @@
 package io.freefair.gradle.plugins;
 
-/**
- * Created by larsgrefer on 11.03.17.
- */
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class JSassExtension {
+    private boolean inplace = false;
 }
