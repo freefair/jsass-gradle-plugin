@@ -103,11 +103,20 @@ public class CompileSass extends DefaultTask {
                         URI inputPath = in.getAbsoluteFile().toURI();
 
                         Output output = compiler.compileFile(inputPath, fakeOut.toURI(), options);
-                        realOut.getParentFile().mkdirs();
-                        ResourceGroovyMethods.write(realOut, output.getCss());
-                        if(sourceMapEnabled) {
-                            realMap.getParentFile().mkdirs();
-                            ResourceGroovyMethods.write(realMap, output.getSourceMap());
+
+                        if (realOut.getParentFile().exists() || realOut.getParentFile().mkdirs()) {
+                            ResourceGroovyMethods.write(realOut, output.getCss());
+                        } else {
+                            getLogger().error("Cannot write into {}", realOut.getParentFile());
+                            throw new TaskExecutionException(CompileSass.this, null);
+                        }
+                        if (sourceMapEnabled) {
+                            if (realMap.getParentFile().exists() || realMap.getParentFile().mkdirs()) {
+                                ResourceGroovyMethods.write(realMap, output.getSourceMap());
+                            } else {
+                                getLogger().error("Cannot write into {}", realMap.getParentFile());
+                                throw new TaskExecutionException(CompileSass.this, null);
+                            }
                         }
                     } catch (CompilationException e) {
                         SassError sassError = new Gson().fromJson(e.getErrorJson(), SassError.class);

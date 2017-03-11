@@ -4,6 +4,11 @@ plugins {
     id "com.gradle.plugin-publish" version "0.9.7"
 }
 
+tasks.withType(FindBugs) {
+    reports.xml.enabled false
+    reports.html.enabled true
+}
+
 gradlePlugin {
     plugins {
         jSass {
