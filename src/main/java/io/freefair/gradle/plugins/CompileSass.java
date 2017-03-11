@@ -103,8 +103,10 @@ public class CompileSass extends DefaultTask {
                         URI inputPath = in.getAbsoluteFile().toURI();
 
                         Output output = compiler.compileFile(inputPath, fakeOut.toURI(), options);
+                        realOut.getParentFile().mkdirs();
                         ResourceGroovyMethods.write(realOut, output.getCss());
                         if(sourceMapEnabled) {
+                            realMap.getParentFile().mkdirs();
                             ResourceGroovyMethods.write(realMap, output.getSourceMap());
                         }
                     } catch (CompilationException e) {
