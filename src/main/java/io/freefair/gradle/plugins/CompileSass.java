@@ -34,6 +34,12 @@ public class CompileSass extends DefaultTask {
     @OutputDirectory
     private File destinationDir;
 
+    @Input
+    private String cssPath = "";
+
+    @Input
+    private String sassPath = "";
+
     @TaskAction
     public void compileSass() {
         Compiler compiler = new Compiler();
@@ -54,10 +60,14 @@ public class CompileSass extends DefaultTask {
         options.setSourceComments(sourceComments);
         options.setSourceMapContents(sourceMapContents);
         options.setSourceMapEmbed(sourceMapEmbed);
-        options.setSourceMapFile(sourceMapFile);
         options.setSourceMapRoot(sourceMapRoot);
 
-        getProject().fileTree(sourceDir).visit(new FileVisitor() {
+        File realSourceDir = new File(sourceDir, sassPath);
+
+        File fakeDestinationDir = new File(sourceDir, cssPath);
+        File realDestinationDir = new File(destinationDir, cssPath);
+
+        getProject().fileTree(realSourceDir).visit(new FileVisitor() {
             @Override
             public void visitDir(FileVisitDetails fileVisitDetails) {
 
@@ -76,36 +86,43 @@ public class CompileSass extends DefaultTask {
 
                     pathString = pathString.substring(0, pathString.length() - 5) + ".css";
 
-                    File out = new File(destinationDir, pathString);
+                    File realOut = new File(realDestinationDir, pathString);
+                    File fakeOut = new File(fakeDestinationDir, pathString);
+                    File realMap = new File(realDestinationDir, pathString + ".map");
+                    File fakeMap = new File(fakeDestinationDir, pathString + ".map");
 
                     options.setIsIndentedSyntaxSrc(name.endsWith(".sass"));
-                    compile(in, out, compiler, options);
+
+                    if(sourceMapEnabled) {
+                        options.setSourceMapFile(fakeMap.toURI());
+                    } else {
+                        options.setSourceMapFile(null);
+                    }
+
+                    try {
+                        URI inputPath = in.getAbsoluteFile().toURI();
+
+                        Output output = compiler.compileFile(inputPath, fakeOut.toURI(), options);
+                        ResourceGroovyMethods.write(realOut, output.getCss());
+                        if(sourceMapEnabled) {
+                            ResourceGroovyMethods.write(realMap, output.getSourceMap());
+                        }
+                    } catch (CompilationException e) {
+                        SassError sassError = new Gson().fromJson(e.getErrorJson(), SassError.class);
+
+                        getLogger().error("{}:{}:{}", sassError.getFile(), sassError.getLine(), sassError.getColumn());
+                        getLogger().error(e.getErrorMessage());
+
+                        throw new TaskExecutionException(CompileSass.this, e);
+                    } catch (IOException e) {
+                        getLogger().error(e.getLocalizedMessage());
+                        throw new TaskExecutionException(CompileSass.this, e);
+                    }
                 }
             }
         });
 
 
-    }
-
-    private void compile(File in, File out, Compiler compiler, Options options) {
-        try {
-            URI inputPath = in.getAbsoluteFile().toURI();
-            URI outputPath = out.getAbsoluteFile().toURI();
-
-            getLogger().info("Compile {} to {}", inputPath, outputPath);
-            Output output = compiler.compileFile(inputPath, outputPath, options);
-            ResourceGroovyMethods.write(out, output.getCss());
-        } catch (CompilationException e) {
-            SassError sassError = new Gson().fromJson(e.getErrorJson(), SassError.class);
-
-            getLogger().error("{}:{}:{}", sassError.getFile(), sassError.getLine(), sassError.getColumn());
-            getLogger().error(e.getErrorMessage());
-
-            throw new TaskExecutionException(this, e);
-        } catch (IOException e) {
-            getLogger().error(e.getLocalizedMessage());
-            throw new TaskExecutionException(this, e);
-        }
     }
 
     /**
@@ -179,12 +196,8 @@ public class CompileSass extends DefaultTask {
     @Input
     private boolean sourceMapEmbed = false;
 
-    /**
-     * Path to source map file. Enables the source map generating. Used to create sourceMappingUrl.
-     */
     @Input
-    @Optional
-    private URI sourceMapFile;
+    private boolean sourceMapEnabled = true;
 
     @Input
     @Optional
