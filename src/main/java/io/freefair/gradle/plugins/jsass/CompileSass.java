@@ -1,4 +1,4 @@
-package io.freefair.gradle.plugins;
+package io.freefair.gradle.plugins.jsass;
 
 import io.bit3.jsass.*;
 import io.bit3.jsass.Compiler;

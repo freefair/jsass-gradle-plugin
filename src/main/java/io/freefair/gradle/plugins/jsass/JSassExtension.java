@@ -1,4 +1,4 @@
-package io.freefair.gradle.plugins;
+package io.freefair.gradle.plugins.jsass;
 
 import lombok.Getter;
 import lombok.Setter;

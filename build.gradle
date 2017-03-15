@@ -11,9 +11,17 @@ tasks.withType(FindBugs) {
 
 gradlePlugin {
     plugins {
-        jSass {
-            id = "io.freefair.jsass"
-            implementationClass = "io.freefair.gradle.plugins.JSassPlugin"
+        jSassBase {
+            id = "io.freefair.jsass-base"
+            implementationClass = "io.freefair.gradle.plugins.JSassBasePlugin"
+        }
+        jSassJava {
+            id = "io.freefair.jsass-java"
+            implementationClass = "io.freefair.gradle.plugins.JSassJavaPlugin"
+        }
+        jSassWar {
+            id = "io.freefair.jsass-war"
+            implementationClass = "io.freefair.gradle.plugins.JSassWarPlugin"
         }
     }
 }
@@ -23,13 +31,18 @@ group = "io.freefair.gradle"
 pluginBundle {
     website = "https://github.com/freefair/jsass-gradle-plugin"
     vcsUrl = 'https://github.com/freefair/jsass-gradle-plugin'
+    tags = ['jSass', 'sass', 'scss']
 
     plugins {
-        jSass {
-            id = "io.freefair.jsass"
-            displayName = "jSass Plugin"
-            description = "jSass Plugin"
-            tags = ['jSass', 'sass', 'scss']
+        jSassJava {
+            id = "io.freefair.jsass-java"
+            displayName = "jSass Java Plugin"
+            description = "Compiles SASS and SCSS in your java resources (src/*/resources)"
+        }
+        jSassWar {
+            id = "io.freefair.jsass-war"
+            implementationClass = "io.freefair.gradle.plugins.JSassWarPlugin"
+            description = "Compiles SASS and SCSS in your webapp resources (src/main/webapp)"
         }
     }
 
