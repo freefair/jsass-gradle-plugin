@@ -7,9 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.codehaus.groovy.runtime.ResourceGroovyMethods;
 import org.gradle.api.DefaultTask;
-import org.gradle.api.file.FileCollection;
-import org.gradle.api.file.FileVisitDetails;
-import org.gradle.api.file.FileVisitor;
+import org.gradle.api.file.*;
 import org.gradle.api.tasks.*;
 import com.google.gson.Gson;
 
@@ -28,10 +26,26 @@ import java.util.List;
 @Setter
 public class CompileSass extends DefaultTask {
 
-    @InputDirectory
+    @InputFiles
+    protected FileTree getSourceFiles() {
+        ConfigurableFileTree files = getProject().fileTree(new File(sourceDir, sassPath));
+        files.include(fileTreeElement -> fileTreeElement.getName().endsWith(".scss"));
+        files.include(fileTreeElement -> fileTreeElement.getName().endsWith(".sass"));
+        return files;
+    }
+
+    @OutputFiles
+    protected FileTree getOutputFiles() {
+        ConfigurableFileTree files = getProject().fileTree(new File(destinationDir, cssPath));
+        files.include(fileTreeElement -> fileTreeElement.getName().endsWith(".css"));
+        files.include(fileTreeElement -> fileTreeElement.getName().endsWith(".css.map"));
+        return files;
+    }
+
+    @Internal
     private File sourceDir;
 
-    @OutputDirectory
+    @Internal
     private File destinationDir;
 
     @Input
