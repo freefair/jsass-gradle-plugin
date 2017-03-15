@@ -41,7 +41,7 @@ pluginBundle {
         }
         jSassWar {
             id = "io.freefair.jsass-war"
-            implementationClass = "io.freefair.gradle.plugins.JSassWarPlugin"
+            displayName = "jSass War Plugin"
             description = "Compiles SASS and SCSS in your webapp resources (src/main/webapp)"
         }
     }
