@@ -146,8 +146,6 @@ public class CompileSass extends DefaultTask {
                 }
             }
         });
-
-
     }
 
     /**
