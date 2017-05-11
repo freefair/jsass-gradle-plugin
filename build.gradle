@@ -61,7 +61,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly "org.projectlombok:lombok:1.16.10"
+    compileOnly "org.projectlombok:lombok:1.16.16"
     compile "io.bit3:jsass:5.5.1"
     compile 'com.google.code.gson:gson:2.8.0'
 
