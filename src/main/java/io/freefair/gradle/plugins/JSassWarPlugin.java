@@ -1,6 +1,6 @@
 package io.freefair.gradle.plugins;
 
-import io.freefair.gradle.plugins.jsass.CompileSass;
+import io.freefair.gradle.plugins.jsass.SassCompile;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.BasePlugin;
@@ -20,7 +20,7 @@ public class JSassWarPlugin implements Plugin<Project> {
         jSassBasePlugin = project.getPlugins().apply(JSassBasePlugin.class);
         project.getPlugins().apply(WarPlugin.class);
 
-        CompileSass compileWebappSass = project.getTasks().create("compileWebappSass", CompileSass.class);
+        SassCompile compileWebappSass = project.getTasks().create("compileWebappSass", SassCompile.class);
         compileWebappSass.setGroup(BasePlugin.BUILD_GROUP);
         compileWebappSass.setDescription("Compile sass and scss files for the webapp");
 

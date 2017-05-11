@@ -1,6 +1,6 @@
 package io.freefair.gradle.plugins;
 
-import io.freefair.gradle.plugins.jsass.CompileSass;
+import io.freefair.gradle.plugins.jsass.SassCompile;
 import lombok.Getter;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
@@ -33,17 +33,17 @@ public class JSassJavaPlugin implements Plugin<Project> {
 
             int i = 1;
             for (File srcDir : srcDirs) {
-                CompileSass compileSass = project.getTasks().create(i == 1 ? taskName : taskName + i, CompileSass.class);
+                SassCompile sassCompile = project.getTasks().create(i == 1 ? taskName : taskName + i, SassCompile.class);
                 i++;
 
-                compileSass.setGroup(BasePlugin.BUILD_GROUP);
-                compileSass.setDescription("Compile sass and scss files for the " + sourceSet.getName() + " source set");
+                sassCompile.setGroup(BasePlugin.BUILD_GROUP);
+                sassCompile.setDescription("Compile sass and scss files for the " + sourceSet.getName() + " source set");
 
-                compileSass.setSourceDir(srcDir);
+                sassCompile.setSourceDir(srcDir);
 
                 Copy processResources = (Copy) project.getTasks().getByName(sourceSet.getProcessResourcesTaskName());
 
-                compileSass.getConventionMapping().map("destinationDir", () -> {
+                sassCompile.getConventionMapping().map("destinationDir", () -> {
                             if (jSassBasePlugin.getExtension().isInplace()) {
                                 return srcDir;
                             } else {
@@ -51,7 +51,7 @@ public class JSassJavaPlugin implements Plugin<Project> {
                             }
                         });
 
-                processResources.dependsOn(compileSass);
+                processResources.dependsOn(sassCompile);
             }
         });
     }

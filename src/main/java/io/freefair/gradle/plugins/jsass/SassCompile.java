@@ -27,7 +27,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class CompileSass extends ConventionTask {
+public class SassCompile extends ConventionTask {
 
     @InputFiles
     protected FileTree getSourceFiles() {
@@ -126,14 +126,14 @@ public class CompileSass extends ConventionTask {
                             ResourceGroovyMethods.write(realOut, output.getCss());
                         } else {
                             getLogger().error("Cannot write into {}", realOut.getParentFile());
-                            throw new TaskExecutionException(CompileSass.this, null);
+                            throw new TaskExecutionException(SassCompile.this, null);
                         }
                         if (isSourceMapEnabled()) {
                             if (realMap.getParentFile().exists() || realMap.getParentFile().mkdirs()) {
                                 ResourceGroovyMethods.write(realMap, output.getSourceMap());
                             } else {
                                 getLogger().error("Cannot write into {}", realMap.getParentFile());
-                                throw new TaskExecutionException(CompileSass.this, null);
+                                throw new TaskExecutionException(SassCompile.this, null);
                             }
                         }
                     } catch (CompilationException e) {
@@ -142,10 +142,10 @@ public class CompileSass extends ConventionTask {
                         getLogger().error("{}:{}:{}", sassError.getFile(), sassError.getLine(), sassError.getColumn());
                         getLogger().error(e.getErrorMessage());
 
-                        throw new TaskExecutionException(CompileSass.this, e);
+                        throw new TaskExecutionException(SassCompile.this, e);
                     } catch (IOException e) {
                         getLogger().error(e.getLocalizedMessage());
-                        throw new TaskExecutionException(CompileSass.this, e);
+                        throw new TaskExecutionException(SassCompile.this, e);
                     }
                 }
             }
@@ -233,16 +233,19 @@ public class CompileSass extends ConventionTask {
     public class LoggingFunctionProvider {
 
         @WarnFunction
+        @SuppressWarnings("unused")
         public void warn(String message) {
             getLogger().warn(message);
         }
 
         @ErrorFunction
+        @SuppressWarnings("unused")
         public void error(String message) {
             getLogger().error(message);
         }
 
         @DebugFunction
+        @SuppressWarnings("unused")
         public void debug(String message) {
             getLogger().info(message);
         }

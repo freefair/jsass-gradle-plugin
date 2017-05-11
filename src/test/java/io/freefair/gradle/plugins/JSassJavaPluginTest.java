@@ -1,6 +1,6 @@
 package io.freefair.gradle.plugins;
 
-import io.freefair.gradle.plugins.jsass.CompileSass;
+import io.freefair.gradle.plugins.jsass.SassCompile;
 import org.gradle.api.Project;
 import org.gradle.internal.impldep.com.google.common.io.Files;
 import org.gradle.testfixtures.ProjectBuilder;
@@ -42,7 +42,7 @@ public class JSassJavaPluginTest {
 
         JSassJavaPlugin jSassJavaPlugin = project.getPlugins().apply(JSassJavaPlugin.class);
 
-        CompileSass compileSass = (CompileSass) project.getTasks().getByName("compileSass");
+        SassCompile compileSass = (SassCompile) project.getTasks().getByName("compileSass");
 
         compileSass.compileSass();
 

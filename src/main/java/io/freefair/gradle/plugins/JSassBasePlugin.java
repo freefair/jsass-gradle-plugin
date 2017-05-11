@@ -1,6 +1,6 @@
 package io.freefair.gradle.plugins;
 
-import io.freefair.gradle.plugins.jsass.CompileSass;
+import io.freefair.gradle.plugins.jsass.SassCompile;
 import io.freefair.gradle.plugins.jsass.JSassExtension;
 import lombok.Getter;
 import org.gradle.api.Plugin;
@@ -19,7 +19,7 @@ public class JSassBasePlugin implements Plugin<Project> {
     public void apply(Project project) {
         this.extension = project.getExtensions().create("jSass", JSassExtension.class);
 
-        project.getTasks().withType(CompileSass.class, compileSass -> {
+        project.getTasks().withType(SassCompile.class, compileSass -> {
             ConventionMapping conventionMapping = compileSass.getConventionMapping();
 
             conventionMapping.map("indent", () -> extension.getIndent());

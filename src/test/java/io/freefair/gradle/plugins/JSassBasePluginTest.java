@@ -1,6 +1,6 @@
 package io.freefair.gradle.plugins;
 
-import io.freefair.gradle.plugins.jsass.CompileSass;
+import io.freefair.gradle.plugins.jsass.SassCompile;
 import org.gradle.api.Project;
 import org.gradle.testfixtures.ProjectBuilder;
 import org.junit.Before;
@@ -23,7 +23,7 @@ public class JSassBasePluginTest {
     @Test
     public void testPrecisionConvention() throws Exception {
         JSassBasePlugin basePlugin = project.getPlugins().apply(JSassBasePlugin.class);
-        CompileSass testSass = project.getTasks().create("testSass", CompileSass.class);
+        SassCompile testSass = project.getTasks().create("testSass", SassCompile.class);
 
         assertThat(testSass.getPrecision()).isEqualTo(basePlugin.getExtension().getPrecision());
     }
@@ -31,7 +31,7 @@ public class JSassBasePluginTest {
     @Test
     public void testPrecisionConvention_custom() throws Exception {
         JSassBasePlugin basePlugin = project.getPlugins().apply(JSassBasePlugin.class);
-        CompileSass testSass = project.getTasks().create("testSass", CompileSass.class);
+        SassCompile testSass = project.getTasks().create("testSass", SassCompile.class);
 
         basePlugin.getExtension().setPrecision(42);
         assertThat(testSass.getPrecision()).isEqualTo(42);
