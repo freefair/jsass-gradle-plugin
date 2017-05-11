@@ -1,15 +1,15 @@
 package io.freefair.gradle.plugins.jsass;
 
+import com.google.gson.Gson;
 import io.bit3.jsass.*;
 import io.bit3.jsass.Compiler;
 import io.bit3.jsass.importer.Importer;
 import lombok.Getter;
 import lombok.Setter;
 import org.codehaus.groovy.runtime.ResourceGroovyMethods;
-import org.gradle.api.DefaultTask;
 import org.gradle.api.file.*;
+import org.gradle.api.internal.ConventionTask;
 import org.gradle.api.tasks.*;
-import com.google.gson.Gson;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Getter
 @Setter
-public class CompileSass extends DefaultTask {
+public class CompileSass extends ConventionTask {
 
     @InputFiles
     protected FileTree getSourceFiles() {
@@ -59,22 +59,22 @@ public class CompileSass extends DefaultTask {
         Compiler compiler = new Compiler();
         Options options = new Options();
 
-        options.setFunctionProviders(functionProviders);
-        options.setHeaderImporters(headerImporters);
-        options.setImporters(importers);
-        if (includePaths != null) {
-            options.setIncludePaths(new ArrayList<>(includePaths.getFiles()));
+        options.setFunctionProviders(getFunctionProviders());
+        options.setHeaderImporters(getHeaderImporters());
+        options.setImporters(getImporters());
+        if (getIncludePaths() != null) {
+            options.setIncludePaths(new ArrayList<>(getIncludePaths().getFiles()));
         }
-        options.setIndent(indent);
-        options.setLinefeed(linefeed);
-        options.setOmitSourceMapUrl(omitSourceMapUrl);
-        options.setOutputStyle(outputStyle);
-        options.setPluginPath(pluginPath);
-        options.setPrecision(precision);
-        options.setSourceComments(sourceComments);
-        options.setSourceMapContents(sourceMapContents);
-        options.setSourceMapEmbed(sourceMapEmbed);
-        options.setSourceMapRoot(sourceMapRoot);
+        options.setIndent(getIndent());
+        options.setLinefeed(getLinefeed());
+        options.setOmitSourceMapUrl(isOmitSourceMapUrl());
+        options.setOutputStyle(getOutputStyle());
+        options.setPluginPath(getPluginPath());
+        options.setPrecision(getPrecision());
+        options.setSourceComments(isSourceComments());
+        options.setSourceMapContents(isSourceMapContents());
+        options.setSourceMapEmbed(isSourceMapEmbed());
+        options.setSourceMapRoot(getSourceMapRoot());
 
         File realSourceDir = new File(sourceDir, sassPath);
 
@@ -107,7 +107,7 @@ public class CompileSass extends DefaultTask {
 
                     options.setIsIndentedSyntaxSrc(name.endsWith(".sass"));
 
-                    if(sourceMapEnabled) {
+                    if(isSourceMapEnabled()) {
                         options.setSourceMapFile(fakeMap.toURI());
                     } else {
                         options.setSourceMapFile(null);
@@ -124,7 +124,7 @@ public class CompileSass extends DefaultTask {
                             getLogger().error("Cannot write into {}", realOut.getParentFile());
                             throw new TaskExecutionException(CompileSass.this, null);
                         }
-                        if (sourceMapEnabled) {
+                        if (isSourceMapEnabled()) {
                             if (realMap.getParentFile().exists() || realMap.getParentFile().mkdirs()) {
                                 ResourceGroovyMethods.write(realMap, output.getSourceMap());
                             } else {
@@ -174,22 +174,22 @@ public class CompileSass extends DefaultTask {
     private FileCollection includePaths;
 
     @Input
-    private String indent = "  ";
+    private String indent;
 
     @Input
-    private String linefeed = System.lineSeparator();
+    private String linefeed;
 
     /**
      * Disable sourceMappingUrl in css output.
      */
     @Input
-    private boolean omitSourceMapUrl = false;
+    private boolean omitSourceMapUrl;
 
     /**
      * Output style for the generated css code.
      */
     @Input
-    private OutputStyle outputStyle = OutputStyle.NESTED;
+    private OutputStyle outputStyle;
 
     @Input
     @Optional
@@ -199,28 +199,28 @@ public class CompileSass extends DefaultTask {
      * Precision for outputting fractional numbers.
      */
     @Input
-    private int precision = 8;
+    private int precision;
 
     /**
      * If you want inline source comments.
      */
     @Input
-    private boolean sourceComments = false;
+    private boolean sourceComments;
 
     /**
      * Embed include contents in maps.
      */
     @Input
-    private boolean sourceMapContents = false;
+    private boolean sourceMapContents;
 
     /**
      * Embed sourceMappingUrl as data uri.
      */
     @Input
-    private boolean sourceMapEmbed = false;
+    private boolean sourceMapEmbed;
 
     @Input
-    private boolean sourceMapEnabled = true;
+    private boolean sourceMapEnabled;
 
     @Input
     @Optional

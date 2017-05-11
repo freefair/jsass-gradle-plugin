@@ -1,6 +1,7 @@
 package io.freefair.gradle.plugins;
 
 import io.freefair.gradle.plugins.jsass.CompileSass;
+import lombok.Getter;
 import org.gradle.api.Plugin;
 import org.gradle.api.Project;
 import org.gradle.api.plugins.BasePlugin;
@@ -14,6 +15,7 @@ import java.util.Set;
 /**
  * @author Lars Grefer
  */
+@Getter
 public class JSassJavaPlugin implements Plugin<Project> {
 
     private JSassBasePlugin jSassBasePlugin;
