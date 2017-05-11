@@ -32,9 +32,9 @@ public class JSassJavaPluginTest {
 
     @Test
     public void testSources() throws IOException {
-        File cssFolder = testProjectDir.newFolder("src", "main", "resources", "css");
+        File cssFolder = testProjectDir.newFolder("src", "main", "resources", "sass");
 
-        File mainCss = new File(cssFolder, "main.css");
+        File mainCss = new File(cssFolder, "main.scss");
 
         mainCss.createNewFile();
 
@@ -45,6 +45,8 @@ public class JSassJavaPluginTest {
         CompileSass compileSass = (CompileSass) project.getTasks().getByName("compileSass");
 
         compileSass.compileSass();
+
+        project.getBuildDir();
 
     }
 

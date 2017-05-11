@@ -3,6 +3,9 @@ package io.freefair.gradle.plugins.jsass;
 import com.google.gson.Gson;
 import io.bit3.jsass.*;
 import io.bit3.jsass.Compiler;
+import io.bit3.jsass.annotation.DebugFunction;
+import io.bit3.jsass.annotation.ErrorFunction;
+import io.bit3.jsass.annotation.WarnFunction;
 import io.bit3.jsass.importer.Importer;
 import lombok.Getter;
 import lombok.Setter;
@@ -59,7 +62,8 @@ public class CompileSass extends ConventionTask {
         Compiler compiler = new Compiler();
         Options options = new Options();
 
-        options.setFunctionProviders(getFunctionProviders());
+        options.setFunctionProviders(new ArrayList<>(getFunctionProviders()));
+        options.getFunctionProviders().add(new LoggingFunctionProvider());
         options.setHeaderImporters(getHeaderImporters());
         options.setImporters(getImporters());
         if (getIncludePaths() != null) {
@@ -79,7 +83,7 @@ public class CompileSass extends ConventionTask {
         File realSourceDir = new File(sourceDir, sassPath);
 
         File fakeDestinationDir = new File(sourceDir, cssPath);
-        File realDestinationDir = new File(destinationDir, cssPath);
+        File realDestinationDir = new File(getDestinationDir(), cssPath);
 
         getProject().fileTree(realSourceDir).visit(new FileVisitor() {
             @Override
@@ -225,4 +229,22 @@ public class CompileSass extends ConventionTask {
     @Input
     @Optional
     private URI sourceMapRoot;
+
+    public class LoggingFunctionProvider {
+
+        @WarnFunction
+        public void warn(String message) {
+            getLogger().warn(message);
+        }
+
+        @ErrorFunction
+        public void error(String message) {
+            getLogger().error(message);
+        }
+
+        @DebugFunction
+        public void debug(String message) {
+            getLogger().info(message);
+        }
+    }
 }

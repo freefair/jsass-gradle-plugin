@@ -43,14 +43,15 @@ public class JSassJavaPlugin implements Plugin<Project> {
 
                 Copy processResources = (Copy) project.getTasks().getByName(sourceSet.getProcessResourcesTaskName());
 
-                project.afterEvaluate(p -> {
-                    if (jSassBasePlugin.getExtension().isInplace()) {
-                        compileSass.setDestinationDir(srcDir);
-                    } else {
-                        compileSass.setDestinationDir(processResources.getDestinationDir());
-                    }
-                    processResources.dependsOn(compileSass);
-                });
+                compileSass.getConventionMapping().map("destinationDir", () -> {
+                            if (jSassBasePlugin.getExtension().isInplace()) {
+                                return srcDir;
+                            } else {
+                                return processResources.getDestinationDir();
+                            }
+                        });
+
+                processResources.dependsOn(compileSass);
             }
         });
     }
