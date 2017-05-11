@@ -13,6 +13,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Created by larsgrefer on 03.05.17.
  */
@@ -36,11 +38,12 @@ public class JSassJavaPluginTest {
 
         File mainCss = new File(cssFolder, "main.scss");
 
-        mainCss.createNewFile();
+        boolean newFile = mainCss.createNewFile();
+        assertThat(newFile).isTrue();
 
         Files.write("body { color: red; }", mainCss, Charset.defaultCharset());
 
-        JSassJavaPlugin jSassJavaPlugin = project.getPlugins().apply(JSassJavaPlugin.class);
+        project.getPlugins().apply(JSassJavaPlugin.class);
 
         SassCompile compileSass = (SassCompile) project.getTasks().getByName("compileSass");
 
