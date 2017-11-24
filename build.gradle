@@ -1,7 +1,7 @@
 plugins {
     id "java-gradle-plugin"
     id "findbugs"
-    id "com.gradle.plugin-publish" version "0.9.7"
+    id "com.gradle.plugin-publish" version "0.9.9"
 }
 
 tasks.withType(FindBugs) {
@@ -61,11 +61,10 @@ repositories {
 }
 
 dependencies {
-    compileOnly "org.projectlombok:lombok:1.16.16"
-    compile "io.bit3:jsass:5.5.1"
-    compile 'com.google.code.gson:gson:2.8.0'
+    compileOnly "org.projectlombok:lombok:1.16.18"
+    compile "io.bit3:jsass:5.5.4"
+    compile 'com.google.code.gson:gson:2.8.2'
 
     testCompile "junit:junit:4.12"
-    testCompile 'org.assertj:assertj-core:3.6.2'
+    testCompile 'org.assertj:assertj-core:3.8.0'
 }
-
