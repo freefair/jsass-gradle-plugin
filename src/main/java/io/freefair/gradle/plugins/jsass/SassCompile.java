@@ -32,16 +32,16 @@ public class SassCompile extends ConventionTask {
     @InputFiles
     protected FileTree getSourceFiles() {
         ConfigurableFileTree files = getProject().fileTree(new File(sourceDir, sassPath));
-        files.include(fileTreeElement -> fileTreeElement.getName().endsWith(".scss"));
-        files.include(fileTreeElement -> fileTreeElement.getName().endsWith(".sass"));
+        files.include("**/*.scss");
+        files.include("**/*.sass");
         return files;
     }
 
     @OutputFiles
     protected FileTree getOutputFiles() {
         ConfigurableFileTree files = getProject().fileTree(new File(destinationDir, cssPath));
-        files.include(fileTreeElement -> fileTreeElement.getName().endsWith(".css"));
-        files.include(fileTreeElement -> fileTreeElement.getName().endsWith(".css.map"));
+        files.include("**/*.css");
+        files.include("**/*.css.map");
         return files;
     }
 
