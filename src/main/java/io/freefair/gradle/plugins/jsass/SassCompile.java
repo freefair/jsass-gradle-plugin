@@ -10,6 +10,7 @@ import io.bit3.jsass.importer.Importer;
 import lombok.Getter;
 import lombok.Setter;
 import org.codehaus.groovy.runtime.ResourceGroovyMethods;
+import org.gradle.api.GradleException;
 import org.gradle.api.file.*;
 import org.gradle.api.internal.ConventionTask;
 import org.gradle.api.tasks.*;
@@ -126,14 +127,14 @@ public class SassCompile extends ConventionTask {
                             ResourceGroovyMethods.write(realOut, output.getCss());
                         } else {
                             getLogger().error("Cannot write into {}", realOut.getParentFile());
-                            throw new TaskExecutionException(SassCompile.this, null);
+                            throw new GradleException("Cannot write into " + realMap.getParentFile());
                         }
                         if (isSourceMapEnabled()) {
                             if (realMap.getParentFile().exists() || realMap.getParentFile().mkdirs()) {
                                 ResourceGroovyMethods.write(realMap, output.getSourceMap());
                             } else {
                                 getLogger().error("Cannot write into {}", realMap.getParentFile());
-                                throw new TaskExecutionException(SassCompile.this, null);
+                                throw new GradleException("Cannot write into " + realMap.getParentFile());
                             }
                         }
                     } catch (CompilationException e) {

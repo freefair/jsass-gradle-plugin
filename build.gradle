@@ -1,8 +1,11 @@
 plugins {
     id "java-gradle-plugin"
     id "findbugs"
-    id "com.gradle.plugin-publish" version "0.9.9"
+    id "com.gradle.plugin-publish" version "0.9.10"
 }
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 tasks.withType(FindBugs) {
     reports.xml.enabled false
@@ -61,8 +64,9 @@ repositories {
 }
 
 dependencies {
-    compileOnly "org.projectlombok:lombok:1.16.18"
-    compile "io.bit3:jsass:5.5.4"
+    annotationProcessor "org.projectlombok:lombok:1.16.20"
+    compileOnly "org.projectlombok:lombok:1.16.20"
+    compile "io.bit3:jsass:5.5.6"
     compile 'com.google.code.gson:gson:2.8.2'
 
     testCompile "junit:junit:4.12"
