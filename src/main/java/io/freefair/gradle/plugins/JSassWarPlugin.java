@@ -31,11 +31,11 @@ public class JSassWarPlugin implements Plugin<Project> {
             War war = (War) p.getTasks().getByName(WarPlugin.WAR_TASK_NAME);
             if (jSassBasePlugin.getExtension().isInplace()) {
                 compileWebappSass.setDestinationDir(warPluginConvention.getWebAppDir());
+                war.dependsOn(compileWebappSass);
             } else {
-                compileWebappSass.setDestinationDir(new File(p.getBuildDir(), "generated/webappCss"));
-                war.from(compileWebappSass.getDestinationDir());
+                compileWebappSass.setDestinationDir(new File(p.getBuildDir(), "jsass/webapp"));
+                war.from(compileWebappSass);
             }
-            war.dependsOn(compileWebappSass);
         });
     }
 }
